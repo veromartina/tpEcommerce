@@ -17,17 +17,6 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-/* 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAgnu0N8smj0DeHT325Ks5KCDXjuAOzIqg",
-  authDomain: "e-commerce-4dfd4.firebaseapp.com",
-  projectId: "e-commerce-4dfd4",
-  storageBucket: "e-commerce-4dfd4.firebasestorage.app",
-  messagingSenderId: "225966613918",
-  appId: "1:225966613918:web:5e7f7c03732f19c485a28f"
-};
-  */
 
 //Initialize Firebase
 export const app = initializeApp(firebaseConfig);
