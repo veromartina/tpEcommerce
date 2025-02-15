@@ -1,10 +1,10 @@
 import React from 'react';
-import { ChakraProvider, Heading } from '@chakra-ui/react';
-
+import { ChakraProvider } from '@chakra-ui/react';  
+import Routing from './routes/Routing';  
 function App() {
   return (
-    <ChakraProvider >
-           <Heading >Hola</Heading>
+    <ChakraProvider>
+      <Routing /> {/* Aquí se renderiza el componente de rutas */}
     </ChakraProvider>
   );
 }
