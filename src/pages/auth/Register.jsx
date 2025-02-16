@@ -11,7 +11,7 @@ export const Register = () => {
   const { register, formState, handleSubmit } = useForm();
   const { errors } = formState;
 
-  const { registerUser } = useAuth(); 
+  const { registerUser, loginWithGoogle  } = useAuth(); // Desestructuramos loginWithGoogle desde useAuth
 
   const onSubmit = (data) => {
     console.log(data);  
@@ -63,6 +63,16 @@ export const Register = () => {
           Registrarme
         </Button>
       </form>
+
+      {/* Botón para iniciar sesión con Google */}
+      <Button 
+        mt={4} 
+        colorScheme="blue" 
+        width="100%" 
+        onClick={loginWithGoogle}  // Llama a la función loginWithGoogle de AuthContext
+      >
+        Ingresar con Google
+      </Button>
     </Box>
   );
 };
