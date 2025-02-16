@@ -1,28 +1,14 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+
 import { createContext, useContext, useState } from "react";
 import { auth } from "../firebase/config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   
-  const login = ({email, password}) => {
-   signInWithEmailAndPassword(auth, email, password)
-   .then((userCredential)=>{
-    const user= userCredential.user;
-    console.log(user)
-   })
-   .catch((error)=>{
-    const errorCode =error.code;
-    const errorMessage = error.message;
-    console.log(errorCode,errorMessage)
-   });
-  };
 
- // const logout = () => {
-   
-  //};
 
   const registerUser = async ({email, password})=> {
     
@@ -34,6 +20,7 @@ export const AuthProvider = ({ children }) => {
     const user = userCredential.user;
   
   return user
+
         }catch(error) {
             const errorCode = error.code;
             const errorMessage =error.message;
@@ -41,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         };
     }
         return (
-    <AuthContext.Provider value={{ user,registerUser, login}}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user,registerUser }}>{children}</AuthContext.Provider>
   );
 };
 
