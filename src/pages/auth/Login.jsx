@@ -1,8 +1,8 @@
-import { Box, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputRightElement, Button, Heading } from "@chakra-ui/react"; 
+import { Box, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputRightElement, Button, Heading, IconButton } from "@chakra-ui/react"; 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
-//import { email, password } from "../../utils/validations";
+import { FiEye, FiEyeOff } from "react-icons/fi"; 
 
 
 export const Login = () => {
@@ -40,13 +40,17 @@ return(
               pr="4.5rem"
               type={show ? "text" : "password"}
               placeholder="Ingrese su contraseña"
-              autoComplete="current-password" // Atributo corregido
-              {...register("password", { required: "Este campo es obligatorio" })}
+              autoComplete="current-password" 
+              {...register("password", { required: "Este campo es obligatorio", minLength: { value: 6, message: "La contraseña debe tener al menos 6 caracteres" } })}
             />
             <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleClick}>
-                {show ? "Hide" : "Show"}
-              </Button>
+            <IconButton 
+                h="1.75rem" 
+                size="sm" 
+                icon={show ? <FiEyeOff /> : <FiEye />} 
+                onClick={handleClick}
+                aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"}
+              />
             </InputRightElement>
           </InputGroup>
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
