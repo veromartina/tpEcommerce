@@ -11,11 +11,12 @@ export const Register = () => {
   const { register, formState, handleSubmit } = useForm();
   const { errors } = formState;
 
-  const { registerUser } = useAuth(); // Si tienes una función para registrar al usuario
+  const { registerUser } = useAuth(); 
 
   const onSubmit = (data) => {
-    console.log(data);  // Aquí puedes manejar el registro del usuario
-    registerUser(data.email, data.password); // Si tienes una función de registro en el contexto
+    console.log(data);  
+
+    registerUser(data); 
   };
 
   return (
@@ -40,6 +41,7 @@ export const Register = () => {
               pr="4.5rem"
               type={show ? "text" : "password"}
               placeholder="Ingrese su contraseña"
+              autoComplete="current-password" // Atributo corregido
               {...register("password", { required: "Este campo es obligatorio" })}
             />
             <InputRightElement width="4.5rem">
@@ -58,3 +60,4 @@ export const Register = () => {
     </Box>
   );
 };
+      
