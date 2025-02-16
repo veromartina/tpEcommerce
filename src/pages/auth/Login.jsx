@@ -1,26 +1,25 @@
+import { Box, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputRightElement, Button, Heading } from "@chakra-ui/react"; 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Box, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputRightElement, Button, Heading } from "@chakra-ui/react"; 
 import { useAuth } from "../../context/AuthContext";
+//import { email, password } from "../../utils/validations";
 
-export const Register = () => {
+
+export const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-  
   const { register, formState, handleSubmit } = useForm();
   const { errors } = formState;
 
-  const { registerUser } = useAuth(); 
+  const {login} = useAuth()
 
-  const onSubmit = (data) => {
-    console.log(data);  
+  const onSubmit = (data) =>{
+    login(data)
+  }
 
-    registerUser(data); 
-  };
-
-  return (
+return(
     <Box maxW="400px" mx="auto" mt="10">
-      <Heading>Nuevo usuario</Heading>
+      <Heading>Inicio de sesion</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl isInvalid={errors.email}>
           <FormLabel htmlFor="email">Usuario</FormLabel>
@@ -54,7 +53,7 @@ export const Register = () => {
         </FormControl>
 
         <Button mt={4} colorScheme="teal" type="submit" width="100%">
-          Registrarme
+          Ir a mi cuenta
         </Button>
       </form>
     </Box>
