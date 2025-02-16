@@ -10,19 +10,6 @@ export const password = {
     },
   };
 
-export const confirmPassword = {
-    required: true,
-    validate: (value, context) => value === context.password || "Las contraseñas no coinciden",
-    minLength: {
-      value: 3,
-      message: "El mínimo de carácteres es 3",
-    },
-    maxLength: {
-      value: 6,
-      message: "El máximo de carácteres es 6",
-    },
-  };
-  
   
   export const email = {
     required: true,
