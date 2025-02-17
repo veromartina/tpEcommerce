@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import { FiEye, FiEyeOff } from "react-icons/fi"; 
+import { useNavigate } from "react-router-dom";  
 
 
 export const Login = () => {
@@ -12,11 +13,18 @@ export const Login = () => {
   const { errors } = formState;
 
   const {login} = useAuth()
+  const navigate = useNavigate(); 
 
-  const onSubmit = (data) =>{
-    login(data)
-  }
-
+  const onSubmit = async (data) => {
+    try {
+      await login(data);  // Intentamos hacer login
+      // Si el login es exitoso, redirigimos a la página de creación de pedidos
+      navigate('/create');  
+    } catch (error) {
+      console.error("Error en el login", error);
+    }
+  };
+  
 return(
     <Box maxW="400px" mx="auto" mt="10">
       <Heading>Inicio de sesion</Heading>

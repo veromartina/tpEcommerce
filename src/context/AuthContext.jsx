@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         console.log("Usuario autenticado con Google: ", user);
       })
       .catch((error) => {
-        console.error("Error con Google Auth: ", error.code, error.message);
+        console.log("Error con Google Auth: ", error.code, error.message);
       });
   };
   
@@ -27,14 +27,16 @@ export const AuthProvider = ({ children }) => {
 signInWithEmailAndPassword(auth, 
   email,
   password)
+
   .then((userCredential)=>{
     const user = userCredential.user;
-    setUser(user.uid)
+     setUser(user.uid); // Actualiza el estado del usuario
+     console.log(user)
   })
   .catch((error)=>{
     const errorCode = error.code;
     const errorMessage = error.message;
-    console.log(errorCode, errorMessage);
+    console.log("Error de inicio de sesión: ", errorCode, errorMessage)
   });
   };
   
@@ -45,16 +47,18 @@ signInWithEmailAndPassword(auth,
         const userCredential = await createUserWithEmailAndPassword(auth, 
         email,
         password)
+        const user = userCredential.user;
         console.log(userCredential)
-  
-    const user = userCredential.user;
+
+        setUser(user.uid); // Actualiza el estado del usuario
+        console.log(user); 
   
   return user
 
         }catch(error) {
             const errorCode = error.code;
             const errorMessage =error.message;
-            console.log(errorCode, errorMessage)
+            console.log("Error de inicio de sesión: ", errorCode, errorMessage);
         };
     }
         return (
