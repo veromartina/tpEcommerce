@@ -1,10 +1,20 @@
-import { Box, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputRightElement, Button, Heading, IconButton } from "@chakra-ui/react"; 
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Button,
+  Heading,
+  IconButton,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
-import { FiEye, FiEyeOff } from "react-icons/fi"; 
-import { useNavigate } from "react-router-dom";  
-
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const [show, setShow] = useState(false);
@@ -12,20 +22,20 @@ export const Login = () => {
   const { register, formState, handleSubmit } = useForm();
   const { errors } = formState;
 
-  const {login} = useAuth()
-  const navigate = useNavigate(); 
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      await login(data);  // Intentamos hacer login
+      await login(data); // Intentamos hacer login
       // Si el login es exitoso, redirigimos a la página de creación de pedidos
-      navigate('/create');  
+      navigate("/create");
     } catch (error) {
       console.error("Error en el login", error);
     }
   };
-  
-return(
+
+  return (
     <Box maxW="400px" mx="auto" mt="10">
       <Heading>Inicio de sesion</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -48,14 +58,20 @@ return(
               pr="4.5rem"
               type={show ? "text" : "password"}
               placeholder="Ingrese su contraseña"
-              autoComplete="current-password" 
-              {...register("password", { required: "Este campo es obligatorio", minLength: { value: 6, message: "La contraseña debe tener al menos 6 caracteres" } })}
+              autoComplete="current-password"
+              {...register("password", {
+                required: "Este campo es obligatorio",
+                minLength: {
+                  value: 6,
+                  message: "La contraseña debe tener al menos 6 caracteres",
+                },
+              })}
             />
             <InputRightElement width="4.5rem">
-            <IconButton 
-                h="1.75rem" 
-                size="sm" 
-                icon={show ? <FiEyeOff /> : <FiEye />} 
+              <IconButton
+                h="1.75rem"
+                size="sm"
+                icon={show ? <FiEyeOff /> : <FiEye />}
                 onClick={handleClick}
                 aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"}
               />
@@ -63,12 +79,19 @@ return(
           </InputGroup>
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
         </FormControl>
-
-        <Button mt={4} colorScheme="teal" type="submit" width="100%">
-          Ir a mi cuenta
-        </Button>
+        <Box display="flex" justifyContent="center">
+          {" "}
+          <Button
+            mt={4}
+            colorScheme="teal"
+            type="submit"
+            width="30%"
+            justifyItems="center"
+          >
+            Iniciar sesion
+          </Button>
+        </Box>
       </form>
     </Box>
   );
 };
-      
