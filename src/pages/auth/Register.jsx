@@ -3,8 +3,12 @@ import { useForm } from "react-hook-form";
 import { Box, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputRightElement, Button, Heading, IconButton } from "@chakra-ui/react"; 
 import { useAuth } from "../../context/AuthContext";
 import { FiEye, FiEyeOff } from "react-icons/fi"; 
+import { Login } from "./Login";
+import { Navigate, useNavigate } from "react-router-dom"; 
+
 
 export const Register = () => {
+
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   
@@ -13,11 +17,23 @@ export const Register = () => {
 
   const { registerUser, loginWithGoogle  } = useAuth(); // Desestructuramos loginWithGoogle desde useAuth
 
-  const onSubmit = (data) => {
+  const [isRegistered, setIsRegistered] = useState(false); // Estado para controlar la redirección
+
+  const onSubmit =  async(data) => {
     console.log(data);  
 
-    registerUser(data); 
+   // Registra al usuario
+   await registerUser(data);
+
+   // Después de registrar, cambia el estado para activar la redirección
+   setIsRegistered(true);
+
   };
+// Si el usuario fue registrado correctamente, redirige a la página de login
+if (isRegistered) {
+  return <Navigate to="/login" />;
+}
+
 
   return (
     <Box maxW="400px" mx="auto" mt="10">
@@ -57,9 +73,9 @@ export const Register = () => {
             </InputRightElement>
           </InputGroup>
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-        </FormControl>
+        </FormControl> 
 
-        <Button mt={4} colorScheme="teal" type="submit" width="100%">
+        <Button mt={4} colorScheme="teal" type="submit" width="100%" >
           Registrarme
         </Button>
       </form>

@@ -53,14 +53,22 @@ signInWithEmailAndPassword(auth,
         setUser(user.uid); // Actualiza el estado del usuario
         console.log(user); 
   
-  return user
+  return user;
 
         }catch(error) {
             const errorCode = error.code;
             const errorMessage =error.message;
-            console.log("Error de inicio de sesión: ", errorCode, errorMessage);
-        };
+           
+    // Verifica si el error es de "email already in use"
+    if (errorCode === "auth/email-already-in-use") {
+      console.log("Este correo ya está en uso");
+     
+    } else {
+      console.log("Error de registro: ", errorCode, errorMessage);
     }
+  } 
+        };
+    
         return (
     <AuthContext.Provider value={{ user,registerUser, login, loginWithGoogle }}>{children}</AuthContext.Provider>
   );
