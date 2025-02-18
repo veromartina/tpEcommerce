@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Button, HStack, Link, SimpleGrid, Text, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure, IconButton, useBreakpointValue } from "@chakra-ui/react";
+import { Button, HStack, Link, SimpleGrid, Text, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, useDisclosure, IconButton, useBreakpointValue, Box, Image } from "@chakra-ui/react";
 import React from "react";
 import { NavLink, Link as RouterLink } from "react-router-dom";
 
@@ -19,10 +18,13 @@ const Header = () => {
         width="100%"
         align="center"
       >
-        {/* Título con tamaño de letra responsivo */}
-        <Text fontSize={{ base: "xl", sm: "2xl", md: "3xl", lg: "4xl" }} fontWeight="bold" color="teal.400">
-          SHOP
-        </Text>
+        <Box >
+      <Image
+        src="/mujer.png" 
+        alt="Icono"
+        width="100%"  
+      />
+    </Box>
 
         {/* Ícono de menú en pantallas pequeñas */}
         {isMobile && (
@@ -43,7 +45,7 @@ const Header = () => {
               </Text>
             </NavLink>
 
-            <NavLink as={Link} to="/productos">
+            <NavLink as={Link} to="/productos" onClick={onClose}>
               <Text fontSize={{ base: "sm", md: "md", lg: "lg" }} _hover={{ color: "teal.500" }}>
                 Nuestros productos
               </Text>
@@ -64,9 +66,9 @@ const Header = () => {
         ) : null}
 
         {/* Botón "Iniciar sesión" */}
-        <NavLink to="/login">
+      
           <Button
-            as="a"
+           as="a" href="/login" 
             colorScheme="teal"
             variant="solid"
             size="sm"
@@ -76,7 +78,21 @@ const Header = () => {
           >
             Iniciar sesión
           </Button>
-        </NavLink>
+
+          {/* Botón "Cerrar  sesión" */}
+      
+          <Button
+           as="a" href="/" 
+            colorScheme="teal"
+            variant="solid"
+            size="sm"
+            _hover={{ bg: "teal.600", transform: "scale(1.05)" }}
+            _focus={{ boxShadow: "outline" }}
+            ml={4}
+          >
+            Cerrar sesión
+          </Button>
+        
       </HStack>
 
       {/* Drawer - Menú en móviles */}
@@ -109,70 +125,3 @@ const Header = () => {
 export default Header;
 
 
-
-/*
-import { Button, HStack, Link, SimpleGrid, Text } from "@chakra-ui/react";
-import React from "react";
-import { NavLink, Link as RouterLink } from "react-router-dom";
-
-const Header = () => {
-  return (
-    <SimpleGrid>
-      <HStack 
-        justify="space-between" 
-        marginY="15px" 
-        marginX="10px"
-        width="100%"
-        align="center"
-      >
-     
-        <Text fontSize={{ base: "xl", sm: "2xl", md: "3xl", lg: "4xl" }} fontWeight="bold" color="teal.400">
-          SHOP
-        </Text>
-
-        <HStack spacing={4} display={{ base: "none", md: "flex" }}>
-          <NavLink as={Link} to="/">
-            <Text fontSize={{ base: "sm", md: "md", lg: "lg" }} _hover={{ color: "teal.500" }}>
-              Home
-            </Text>
-          </NavLink>
-
-          <NavLink as={Link} to="/productos">
-            <Text fontSize={{ base: "sm", md: "md", lg: "lg" }} _hover={{ color: "teal.500" }}>
-              Nuestros productos
-            </Text>
-          </NavLink>
-
-          <NavLink as={Link} to="/register">
-            <Text fontSize={{ base: "sm", md: "md", lg: "lg" }} _hover={{ color: "teal.500" }}>
-              Registrarme
-            </Text>
-          </NavLink>
-
-          <NavLink as={Link} to="/create">
-            <Text fontSize={{ base: "sm", md: "md", lg: "lg" }} _hover={{ color: "teal.500" }}>
-              Mis pedidos
-            </Text>
-          </NavLink>
-        </HStack>
-
-        <NavLink to="/login">
-          <Button
-            as="a"
-            colorScheme="teal"
-            variant="solid"
-            size="sm"
-            _hover={{ bg: "teal.600", transform: "scale(1.05)" }}
-            _focus={{ boxShadow: "outline" }}
-            ml={4}
-          >
-            Iniciar sesión
-          </Button>
-        </NavLink>
-      </HStack>
-    </SimpleGrid>
-  );
-};
-
-export default Header;
-*/
