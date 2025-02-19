@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";

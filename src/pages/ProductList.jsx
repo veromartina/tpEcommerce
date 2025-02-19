@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
 import { Box, SimpleGrid, Image, Heading, Text, Button, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 import { db } from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import { useCart } from "../context/CartContext";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 
 const ProductList = () => {
-  const { agregarAlCarrito } = useCart();
+  const { addToCart, cart } = useCart(); // Obtenemos el carrito y la función para agregar productos
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,13 +33,19 @@ const ProductList = () => {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = useCallback(
-    (product) => {
-      const cantidad = 1;
-      agregarAlCarrito(product, cantidad);
-    },
-    [agregarAlCarrito]
-  );
+  //función para agregar al carrito evitando duplicados
+  const navigate = useNavigate();
+  // ...
+  const handleAddToCart = (product) => {
+    if (!cart.some((item) => item.id === product.id)) {
+      addToCart(product);
+      navigate("/cart"); // Redirige al carrito
+    }
+    [cart, addToCart]
+  };
+
+
+
 
   if (loading) {
     return (
@@ -63,10 +69,10 @@ const ProductList = () => {
   return (
     <Box p={4}>
       <Heading as="h2" size="lg" mb={4}>
-        Productos en venta
+        Nuestros productos disponibles
       </Heading>
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
-        {products.map(({ id, image_url, name, price, stock}) => (
+        {products.map(({ id, image_url, name, price, stock }) => (
           <Box
             key={id}
             borderWidth="0.5px"
@@ -91,7 +97,7 @@ const ProductList = () => {
               ${price}
             </Text>
             <RouterLink to={`/productos/${id}`}>
-              <Button colorScheme="transparent" mt={2} w="full" textColor="blue" fontSize="md" fontWeight="normal" >
+              <Button colorScheme="transparent" mt={2} w="full" textColor="blue" fontSize="md" fontWeight="normal">
                 Ver más ...
               </Button>
             </RouterLink>
