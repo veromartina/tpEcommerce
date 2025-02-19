@@ -1,18 +1,17 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-//import { useNavigate } from "react-router-dom";
 import Routing from "../routes/Routing";
 import React, { useEffect } from "react";
-import ScrollToTop from '../components/ScrollToTop'
+import ScrollToTop from '../components/ScrollToTop';
 
 const AppLayout = () => {
   return (
     <Grid
       templateAreas={`"header"
-                  "main"
-                  "footer"`}  
-      gridTemplateRows={"80px 1fr 50px"} 
+                      "main"
+                      "footer"`}  
+      gridTemplateRows={"80px 1fr 50px"}  
       gridTemplateColumns={"1fr"} 
       gap="1"
       fontWeight="bold"
@@ -22,9 +21,18 @@ const AppLayout = () => {
         <Header />
       </GridItem>
 
-      <GridItem pl="2" bg="green.300" area={"main"}>
+      <GridItem
+        pl="2"
+        area={"main"}
+        minH="100vh"
+        backgroundColor="transparent"  
+        display="flex"
+        flexDirection="column"
+        justifyContent="flex-start"  
+        paddingBottom="50px"
+      >
         <ScrollToTop />
-        <Routing />
+        <Routing /> 
       </GridItem>
 
       <GridItem area={"footer"}>

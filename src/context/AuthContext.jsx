@@ -1,12 +1,14 @@
 
 import { createContext, useContext, useState } from "react";
 import { auth } from "../firebase/config";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // Importo métodos necesarios para Google
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth"; // Importo métodos necesarios para Google
+import { useToast } from "@chakra-ui/react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const toast = useToast()
 
   // Función para login con Google
   const loginWithGoogle = () => {
@@ -68,9 +70,25 @@ signInWithEmailAndPassword(auth,
     }
   } 
         };
-    
+ 
+        //deslogearse
+const logout = ()=> {
+  signOut(auth)
+  .then(()=>{
+    toast({
+      title:"Sign off correct",
+      status: "info",
+      isClosable: true,
+    duration:3000, 
+     })
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+}
+
         return (
-    <AuthContext.Provider value={{ user,registerUser, login, loginWithGoogle }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user,registerUser, login, logout, loginWithGoogle }}>{children}</AuthContext.Provider>
   );
 };
 

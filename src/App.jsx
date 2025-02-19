@@ -1,25 +1,11 @@
-import React from 'react';
-//import { ChakraProvider } from '@chakra-ui/react';  
-//import Routing from './routes/Routing';  
-
-/*
-function App() {
-  return (
-    <ChakraProvider>
-      <Routing />
-    </ChakraProvider>
-  );
-}
-
-export default App;
-*/
-
+import { CartProvider } from "./context/CartContext";  // Asegúrate de importar el CartProvider
 import AppLayout from "./layouts/AppLayout";
 
 function App() {
-  
   return (
-    <AppLayout/>
+    <CartProvider> {/* Envuelve AppLayout con CartProvider */}
+      <AppLayout />
+    </CartProvider>
   );
 }
 
