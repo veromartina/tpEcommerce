@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Box, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputRightElement, Button, Heading, IconButton } from "@chakra-ui/react"; 
@@ -79,16 +80,6 @@ if (isRegistered) {
           Registrarme
         </Button>
       </form>
-
-      {/* Botón para iniciar sesión con Google */}
-      <Button 
-        mt={4} 
-        colorScheme="blue" 
-        width="100%" 
-        onClick={loginWithGoogle}  // Llama a la función loginWithGoogle de AuthContext
-      >
-        Ingresar con Google
-      </Button>
     </Box>
   );
 };

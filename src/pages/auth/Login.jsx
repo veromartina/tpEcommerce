@@ -27,9 +27,9 @@ export const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      await login(data); // Intentamos hacer login
+      await login(data);
       // Si el login es exitoso, redirigimos a la página de creación de pedidos
-      navigate("/create");
+      navigate("/cart");
     } catch (error) {
       console.error("Error en el login", error);
     }

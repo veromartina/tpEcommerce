@@ -1,45 +1,55 @@
+
 import { createContext, useContext, useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 
-// Creamos el contexto del carrito
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { user } = useAuth(); // Obtenemos el usuario desde el contexto de autenticación
-  const [cart, setCart] = useState([]); // Estado para almacenar los productos del carrito
+  const { user } = useAuth();
+  const [cart, setCart] = useState([]);
 
-  // Cargar el carrito desde Firestore cuando el usuario inicie sesión
+  // Carga el carrito desde Firestore cuando el usuario inicia sesión
   useEffect(() => {
     const loadCart = async () => {
-      if (user) {
-        const cartRef = doc(db, "carts", user.uid);
+      if (!user || !user.uid) {
+        setCart([]); // Si no hay usuario, limpia el carrito
+        return;
+      }
+
+      try {
+        const cartRef = doc(db, "cart", user.uid);
         const cartSnap = await getDoc(cartRef);
+
         if (cartSnap.exists()) {
-          setCart(cartSnap.data().items || []); // Si existe el carrito, cargamos los productos
+          setCart(cartSnap.data().items || []);
         } else {
-          setCart([]); // Si no existe, dejamos el carrito vacío
+          setCart([]); // Si no existe, inicializamos el carrito vacío
         }
-      } else {
-        setCart([]); // Si no hay usuario, limpiamos el carrito
+      } catch (error) {
+        console.error("Error al cargar el carrito:", error);
       }
     };
 
     loadCart();
-  }, [user]); // Cargar cuando el usuario cambie
+  }, [user]); // Se ejecuta cada vez que el usuario cambia
 
-  // Guardar el carrito en Firestore cuando cambie
+  // Guarda el carrito en Firestore cuando cambie
   useEffect(() => {
     const saveCart = async () => {
-      if (user) {
-        const cartRef = doc(db, "carts", user.uid);
+      if (!user || !user.uid || cart.length === 0) return;
+
+      try {
+        const cartRef = doc(db, "cart", user.uid);
         await setDoc(cartRef, { items: cart });
+      } catch (error) {
+        console.error("Error al guardar el carrito:", error);
       }
     };
 
     saveCart();
-  }, [cart, user]); // Guardar el carrito cuando cambie o cuando cambie el usuario
+  }, [cart, user]);
 
   // Función para agregar productos al carrito
   const addToCart = (product) => {
@@ -48,11 +58,11 @@ export const CartProvider = ({ children }) => {
       if (existingProduct) {
         return prevCart.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 } // Si ya existe, incrementamos la cantidad
+            ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        return [...prevCart, { ...product, quantity: 1 }]; // Si no existe, lo agregamos con cantidad 1
+        return [...prevCart, { ...product, quantity: 1 }];
       }
     });
   };
@@ -62,23 +72,22 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
 
-  // Función para actualizar la cantidad de un producto
+  // Función para actualizar la cantidad de un producto en el carrito
   const updateQuantity = (productId, quantity) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
         item.id === productId
-          ? { ...item, quantity: Math.max(1, quantity) } // Aseguramos que la cantidad no sea menor que 1
+          ? { ...item, quantity: Math.max(1, quantity) }
           : item
       )
     );
   };
 
-  // Función para limpiar el carrito
+  // Función para vaciar el carrito
   const clearCart = () => {
     setCart([]);
   };
 
-  // Proveemos el valor del contexto
   return (
     <CartContext.Provider
       value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart }}
@@ -88,5 +97,5 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Hook para acceder al contexto
 export const useCart = () => useContext(CartContext);
+

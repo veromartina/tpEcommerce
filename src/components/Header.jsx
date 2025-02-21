@@ -142,11 +142,7 @@ const Header = () => {
                 Registrarme
               </Text>
             </NavLink>
-            <NavLink as={Link} to="/create" onClick={onClose}>
-              <Text fontSize="xl" mb={4}>
-                Mis pedidos
-              </Text>
-            </NavLink>
+            
           </DrawerBody>
         </DrawerContent>
       </Drawer>

@@ -3,13 +3,14 @@ import { db } from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import { useCart } from "../context/CartContext";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const ProductList = () => {
   const { addToCart, cart } = useCart(); // Obtenemos el carrito y la función para agregar productos
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
@@ -34,18 +35,15 @@ const ProductList = () => {
   }, []);
 
   //función para agregar al carrito evitando duplicados
-  const navigate = useNavigate();
-  // ...
   const handleAddToCart = (product) => {
-    if (!cart.some((item) => item.id === product.id)) {
+    if (cart.some((item) => item.id === product.id)) {
+      alert(`${product.name} ya está en el carrito.`);
+    } else {
       addToCart(product);
-      navigate("/cart"); // Redirige al carrito
+      alert(`${product.name} agregado al carrito.`);
+      navigate("/cart");
     }
-    [cart, addToCart]
   };
-
-
-
 
   if (loading) {
     return (
