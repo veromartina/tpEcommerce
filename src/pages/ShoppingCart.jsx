@@ -23,7 +23,10 @@ const ShoppingCart = () => {
   try {
     const orderRef = await createOrder(cart, user.uid);
     console.log("Pedido creado con ID:", orderRef.id);
-    clearCart(); // Vacía el carrito tras la compra
+
+    // 🛑 Limpiar carrito en Firestore
+    clearCart();
+
   } catch (error) {
     console.error("Error al procesar el pedido:", error);
   }

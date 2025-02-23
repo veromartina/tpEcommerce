@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -7,25 +6,25 @@ import { useAuth } from "../context/AuthContext";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [cart, setCart] = useState([]);
 
-  // Carga el carrito desde Firestore cuando el usuario inicia sesión
+  // Cargar el carrito desde Firestore al iniciar sesión
   useEffect(() => {
     const loadCart = async () => {
-      if (!user || !user.uid) {
-        setCart([]); // Si no hay usuario, limpia el carrito
+      if (!user) {
+        setCart([]); // Si no hay usuario, limpiar carrito
         return;
       }
 
       try {
-        const cartRef = doc(db, "cart", user.uid);
+        const cartRef = doc(db, "cart", user.uid); // Se usa user directamente
         const cartSnap = await getDoc(cartRef);
 
         if (cartSnap.exists()) {
           setCart(cartSnap.data().items || []);
         } else {
-          setCart([]); // Si no existe, inicializamos el carrito vacío
+          setCart([]); // Si no hay carrito guardado, inicializar vacío
         }
       } catch (error) {
         console.error("Error al cargar el carrito:", error);
@@ -33,16 +32,16 @@ export const CartProvider = ({ children }) => {
     };
 
     loadCart();
-  }, [user]); // Se ejecuta cada vez que el usuario cambia
+  }, [user]);
 
-  // Guarda el carrito en Firestore cuando cambie
+  // Guardar el carrito en Firestore cuando cambia
   useEffect(() => {
     const saveCart = async () => {
-      if (!user || !user.uid || cart.length === 0) return;
+      if (!user || cart.length === 0) return;
 
       try {
-        const cartRef = doc(db, "cart", user.uid);
-        await setDoc(cartRef, { items: cart });
+        const cartRef = doc(db, "cart", user.uid); // Se usa user directamente
+        await setDoc(cartRef, {uid:user.uid, items: cart });
       } catch (error) {
         console.error("Error al guardar el carrito:", error);
       }
@@ -50,6 +49,22 @@ export const CartProvider = ({ children }) => {
 
     saveCart();
   }, [cart, user]);
+
+  // Guardar carrito antes de cerrar sesión
+  const handleLogout = async () => {
+    if (user) {
+      try {
+        // 💡 Opcional: eliminar el carrito de Firestore en lugar de solo limpiarlo
+        const cartRef = doc(db, "cart", user.uid);
+        await setDoc(cartRef, { uid: user.uid, items: [] }); // Guardar carrito vacío
+      } catch (error) {
+        console.error("Error al limpiar el carrito en Firestore:", error);
+      }
+    }
+  
+    await logout(); 
+    setCart([]); // Vaciar carrito localmente
+  };
 
   // Función para agregar productos al carrito
   const addToCart = (product) => {
@@ -72,25 +87,23 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
 
-  // Función para actualizar la cantidad de un producto en el carrito
-  const updateQuantity = (productId, quantity) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId
-          ? { ...item, quantity: Math.max(1, quantity) }
-          : item
-      )
-    );
-  };
-
   // Función para vaciar el carrito
-  const clearCart = () => {
-    setCart([]);
-  };
+const clearCart = async () => {
+  setCart([]);
+  
+  if (user) {
+    try {
+      const cartRef = doc(db, "cart", user.uid);
+      await setDoc(cartRef, { uid: user.uid, items: [] }); // Guardar carrito vacío en Firestore
+    } catch (error) {
+      console.error("Error al vaciar el carrito en Firestore:", error);
+    }
+  }
+};
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart }}
+      value={{ cart, addToCart, removeFromCart, clearCart, handleLogout }}
     >
       {children}
     </CartContext.Provider>
@@ -98,4 +111,3 @@ export const CartProvider = ({ children }) => {
 };
 
 export const useCart = () => useContext(CartContext);
-
