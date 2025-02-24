@@ -19,7 +19,7 @@ const ProductDetails = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setProduct(docSnap.data());  // Seteamos los datos del producto
+          setProduct(docSnap.data());  
         } else {
           setError("Producto no encontrado");
         }
@@ -49,7 +49,7 @@ const ProductDetails = () => {
   const { name, description, price, image_url } = product;
 
   return (
-    <CardChakra maxW="sm">
+    <CardChakra maxW="sm" mt="30px"position="relative" left="100px">
       <CardBody>
         <Image
           src={image_url} 
@@ -63,7 +63,7 @@ const ProductDetails = () => {
             $ {price}
           </Text>
         </Stack>
-        <Button colorScheme="pink" onClick={() => navigate(-1)}>
+        <Button colorScheme="teal" onClick={() => navigate(-1)}>
           Atrás
         </Button>
       </CardBody>

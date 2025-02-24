@@ -65,10 +65,12 @@ const ProductList = () => {
   }
 
   return (
-    <Box p={4}>
-      <Heading as="h2" size="lg" mb={4}>
+    <Box >
+      <Box width="100%" height="70px"  display="flex" justifyContent="center" alignItems="center">
+      <Heading as="h2"   fontFamily="'Playfair Display', serif"  fontSize={{ base: '15px', md: '25px', lg: '35px'}} fontWeight="bold">
         Nuestros productos disponibles
       </Heading>
+      </Box>
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
         {products.map(({ id, image_url, name, price, stock }) => (
           <Box
@@ -87,7 +89,7 @@ const ProductList = () => {
               objectFit="container"
               mx="auto"
             />
-            <Heading fontSize="lg" fontWeight="bold" mt={2} textAlign="center">
+            <Heading fontWeight="bold" mt={2} textAlign="center" fontFamily="'Playfair Display', serif"  fontSize={{ base: '5px', md: '10px', lg: '15px' }}>
               {name}
             </Heading>
            
@@ -99,14 +101,16 @@ const ProductList = () => {
                 Ver más ...
               </Button>
             </RouterLink>
+            <Box display="flex" justifyContent="center">
             <Button
               colorScheme="teal"
               mt={2}
-              w="full"
+              w="150px"
               onClick={() => handleAddToCart({ id, name, price, image_url, stock })}
-            >
+            > 
               Agregar al carrito
             </Button>
+            </Box>
           </Box>
         ))}
       </SimpleGrid>

@@ -24,7 +24,7 @@ const ShoppingCart = () => {
     const orderRef = await createOrder(cart, user.uid);
     console.log("Pedido creado con ID:", orderRef.id);
 
-    // 🛑 Limpiar carrito en Firestore
+
     clearCart();
 
   } catch (error) {

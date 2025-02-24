@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [alert, setAlert] = useState(null);
   const navigate = useNavigate(); 
+ 
 
   // Verificar si hay un usuario autenticado al cargar la app
   useEffect(() => {
@@ -59,6 +60,7 @@ export const AuthProvider = ({ children }) => {
 
 
   //  Función para cerrar sesión con redirección
+ 
   const logout = async () => {
     try {
       await signOut(auth);

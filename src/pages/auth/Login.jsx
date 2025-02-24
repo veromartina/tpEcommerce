@@ -85,7 +85,7 @@ export const Login = () => {
             mt={4}
             colorScheme="teal"
             type="submit"
-            width="30%"
+            width="50%"
             justifyItems="center"
           >
             Iniciar sesion

@@ -1,8 +1,6 @@
 import {
   Button,
   HStack,
-  Link,
-  SimpleGrid,
   Text,
   Drawer,
   DrawerBody,
@@ -15,138 +13,75 @@ import {
   useBreakpointValue,
   Box,
   Image,
+  Flex,
 } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import React from "react";
 import { NavLink, Link as RouterLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+//import { useCart } from "../context/CartContext";
+
 
 const Header = () => {
-  // Drawer control
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  // Determina si es una pantalla pequeña (hasta 425px)
-  const isMobile = useBreakpointValue({ base: true, md: false });
+  const isMobile = useBreakpointValue({ base: true, md: true, lg: false });
+  const { logout } = useAuth();
 
   return (
-    <SimpleGrid>
-      <HStack
-        justify="space-between"
-        marginY="15px"
-        marginX="10px"
-        width="100%"
-        align="center"
-      >
-        <Box>
-          <Image src="/mujer.png" alt="Icono" width="100%" />
-        </Box>
+    <Box as="header" width="100%" py={2} px={6} boxShadow="sm" bg="#bce7d7" position="fixed"
+    zIndex={1000}>
+      <HStack justify="space-between" align="center" maxW="1200px" mx="auto">
+        {/* Logo y nombre de la tienda */}
+        <HStack spacing={2}>
+          <Image src="/mujer.png" alt="Logo" boxSize="50px" />
+          <Text fontSize={{ base: '20px', md: '30px', lg: '46px' }}fontWeight="bold" fontFamily="'Playfair Display', serif">
+            Mujer Bonita
+          </Text>
+        </HStack>
 
-        {/* Ícono de menú en pantallas pequeñas */}
-        {isMobile && (
+        {/* Menú en pantallas grandes */}
+        {!isMobile ? (
+          <HStack spacing={6}>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/productos"  >Nuestros productos</NavLink>
+            <NavLink to="/register">Registrarme</NavLink>
+            <NavLink to="/login">Iniciar sesión</NavLink>
+            <Button colorScheme="red" onClick={logout}>
+              Cerrar sesión
+            </Button>
+            <RouterLink to="/cart">
+              <Button variant="ghost" fontSize="2xl">🛒</Button>
+            </RouterLink>
+          </HStack>
+        ) : (
           <IconButton
-            aria-label="Menu"
-            variant="outline"
+            aria-label="Abrir menú"
+            icon={<HamburgerIcon />}
             onClick={onOpen}
-            colorScheme="teal"
+            variant="outline"
           />
         )}
-
-        {/* Links de navegación con tamaño de letra responsivo */}
-        {!isMobile ? (
-          <HStack spacing={4} display="flex">
-            <NavLink as={Link} to="/">
-              <Text
-                fontSize={{ base: "sm", md: "md", lg: "lg" }}
-                _hover={{ color: "teal.500" }}
-              >
-                Home
-              </Text>
-            </NavLink>
-
-            <NavLink as={Link} to="/productos" onClick={onClose}>
-              <Text
-                fontSize={{ base: "sm", md: "md", lg: "lg" }}
-                _hover={{ color: "teal.500" }}
-              >
-                Nuestros productos
-              </Text>
-            </NavLink>
-
-            <NavLink as={Link} to="/register">
-              <Text
-                fontSize={{ base: "sm", md: "md", lg: "lg" }}
-                _hover={{ color: "teal.500" }}
-              >
-                Registrarme
-              </Text>
-            </NavLink>
-
-          </HStack>
-        ) : null}
-
-        <RouterLink to="/cart">
-          <Button colorScheme="teal" variant="solid" size="sm" ml={4} bg="transparent">
-            🛒 
-          </Button>
-        </RouterLink>
-
-        {/* Botón "Iniciar sesión" */}
-
-        <Button
-          as="a"
-          href="/login"
-          colorScheme="teal"
-          variant="solid"
-          size="sm"
-          _hover={{ bg: "teal.600", transform: "scale(1.05)" }}
-          _focus={{ boxShadow: "outline" }}
-          ml={4}
-        >
-          Iniciar sesión
-        </Button>
-
-        {/* Botón "Cerrar  sesión" */}
-
-        <Button
-          as="a"
-          href="/"
-          colorScheme="teal"
-          variant="solid"
-          size="sm"
-          _hover={{ bg: "teal.600", transform: "scale(1.05)" }}
-          _focus={{ boxShadow: "outline" }}
-          ml={4}
-        >
-          Cerrar sesión
-        </Button>
       </HStack>
 
-      {/* Drawer - Menú en móviles */}
-      <Drawer isOpen={isOpen} placement="top" onClose={onClose}>
+      {/* Menú móvil */}
+      <Drawer isOpen={isOpen} placement="top" onClose={onClose} >
         <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
+        <DrawerContent bg="#bce7d7" fontFamily="'Playfair Display', serif">
+          <DrawerCloseButton /> 
           <DrawerHeader>Menú</DrawerHeader>
-
           <DrawerBody>
-            <NavLink as={Link} to="/" onClick={onClose}>
-              <Text fontSize="xl" mb={4}>
-                Home
-              </Text>
-            </NavLink>
-            <NavLink as={Link} to="/productos" onClick={onClose}>
-              <Text fontSize="xl" mb={4}>
-                Nuestros productos
-              </Text>
-            </NavLink>
-            <NavLink as={Link} to="/register" onClick={onClose}>
-              <Text fontSize="xl" mb={4}>
-                Registrarme
-              </Text>
-            </NavLink>
-            
+            <Flex direction="column" gap={4}>
+              <NavLink to="/" onClick={onClose}>Home</NavLink>
+              <NavLink to="/productos" onClick={onClose}>Nuestros productos</NavLink>
+              <NavLink to="/register" onClick={onClose}>Registrarme</NavLink>
+              <NavLink to="/login" onClick={onClose}>Iniciar sesión</NavLink>
+              <NavLink to="/orders" onClick={onClose}>Mis pedidos</NavLink>
+              
+            </Flex>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </SimpleGrid>
+    </Box>
   );
 };
 
