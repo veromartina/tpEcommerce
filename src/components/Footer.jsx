@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, IconButton, HStack, Text, Flex } from "@chakra-ui/react";
+import { Box, IconButton, HStack, Text, Flex, Image } from "@chakra-ui/react";
 import { FaWhatsapp, FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
@@ -23,6 +23,8 @@ const Footer = () => {
         mx="auto"
         flexDirection={{ base: "column", md: "row" }}
       >
+        <Image src="/mujer.png" alt="Logo" boxSize="50px" />
+        
         <Text fontSize="sm" textAlign="center" mb={{ base: 2, md: 0 }}>
           © 2025 - Martina Veronica Soledad || E-commerce. Todos los derechos reservados.
         </Text>

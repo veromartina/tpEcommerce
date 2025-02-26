@@ -1,40 +1,47 @@
-
-import React from "react";
-import { Box, Image, Text, Button, Heading, SimpleGrid } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { 
+  Box, Image, Text, Button, Heading, SimpleGrid, VStack, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Input 
+} from "@chakra-ui/react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { createOrder } from "../firebase/createOrder";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const ShoppingCart = () => {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, updateQuantity, removeFromCart, clearCart, totalItems } = useCart();
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   // Calcular el total
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
- //crear pedido
- const handleCheckout = async () => {
-  if (!user || !user.uid) {
-    alert("Debes iniciar sesión para completar tu compra.");
-    return;
-  }
+  // Finalizar compra
+  const handleCheckout = async () => {
+    if (!user || !user.uid) {
+      alert("Debes iniciar sesión para completar tu compra.");
+      return;
+    }
 
-  try {
-    const orderRef = await createOrder(cart, user.uid);
-    console.log("Pedido creado con ID:", orderRef.id);
+    try {
+      await createOrder(cart, user.uid);
+      clearCart();
+      setOrderSuccess(true);
+    } catch (error) {
+      console.error("Error al procesar el pedido:", error);
+    }
+  };
 
-
-    clearCart();
-
-  } catch (error) {
-    console.error("Error al procesar el pedido:", error);
-  }
-};
+  // Cerrar el Drawer y redirigir al Home
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    navigate("/");
+  };
 
   return (
     <Box p={4}>
-      <Heading as="h2" size="lg" mb={4} textAlign="center">🛒 Mi Carrito</Heading>
+      <Heading as="h2" size="lg" mb={4} textAlign="center">🛒 Mi Carrito ({totalItems})</Heading>
 
       {cart.length === 0 ? (
         <Text textAlign="center" fontSize="xl" color="gray.500">
@@ -43,36 +50,86 @@ const ShoppingCart = () => {
       ) : (
         <>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-            {cart.map(({ id, name, image_url, price, quantity }) => (
+            {cart.map(({ id, name, image_url, price, quantity, stock }) => (
               <Box key={id} borderWidth="1px" borderRadius="lg" p={4} boxShadow="md">
                 <Image src={image_url} alt={name} boxSize="120px" objectFit="cover" />
                 <Text fontWeight="bold">{name}</Text>
-                <Text fontSize="lg">${price}</Text>
+                <Text fontSize="lg">${price} c/u</Text>
+                <Text color="gray.600">Stock disponible: {stock}</Text>
+                <Box display="flex"     align-items="center" justifyContent="space-around">
+
+                {/* Input para cambiar cantidad  FALTA LOGRAR QUE SE MANTEGA LA CANTIDAD VISIBLE DE CADA PRODUCTO  AL LADO DEL INPUT PARA CONTROL DEL CLIENTE, Y UN TOTAL PROVISORIO POR PRODUCTO. QUE EN DRAWER ME MUESTRE EL TOTAL DE CADA PRODUCTO Y EL TOTAL DEFINITIVO*/}
+
+                <Input 
+                  type="number" 
+                  min="1" 
+                  max={stock}
+                  placeholder="Cantidad"     
+                  onChange={(e) => updateQuantity(id, Math.min(stock, Math.max(1, parseInt(e.target.value, 10) || 1)))}
+                  size="sm"
+                  width="80px"
+                  mt={3}
+                />
+
                 <Button colorScheme="red" size="sm" mt={2} onClick={() => removeFromCart(id)}>
                   ❌ Eliminar
                 </Button>
+                </Box>
+
               </Box>
             ))}
           </SimpleGrid>
 
           <Text fontSize="xl" fontWeight="bold" mt={6} textAlign="center">
-            Total: ${total.toFixed(2)}
+            Total a pagar: ${total.toFixed(2)}
           </Text>
+
           <Box display="flex" justifyContent="center">
             <Button colorScheme="red" mt={4} onClick={clearCart}>
               🗑 Vaciar Carrito
             </Button>
-            <Button colorScheme="green" mt={4} ml={2} onClick={handleCheckout}>
+            <Button colorScheme="green" mt={4} ml={2} onClick={() => setIsDrawerOpen(true)}>
               🛍 Finalizar Compra
             </Button>
           </Box>
+
           <RouterLink to={`/productos`}>
-              <Button colorScheme="transparent" mt={2} w="full" textColor="blue" fontSize="md" fontWeight="normal">
-                Seguir comprando ...
-              </Button>
-            </RouterLink>
+            <Button colorScheme="transparent" mt={2} w="full" textColor="blue" fontSize="md" fontWeight="normal">
+              Seguir comprando ...
+            </Button>
+          </RouterLink>
         </>
       )}
+
+      {/* Drawer de Confirmación de Pedido */}
+      <Drawer isOpen={isDrawerOpen} placement="right" onClose={handleCloseDrawer}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader>🛍 Resumen de su Pedido</DrawerHeader>
+          <DrawerBody>
+            {orderSuccess ? (
+              <Text fontSize="lg" fontWeight="bold" color="green.500">
+                ✅ ¡Su compra se realizó con éxito! Nos comunicaremos a la brevedad con usted para confirmar el pago.
+              </Text>
+                
+            ) : (
+              <VStack spacing={4} align="start">
+                {cart.map(({ id, name, quantity }) => (
+                  <Text key={id}>{name} x {quantity}</Text>
+                ))}
+                <Text fontSize="lg" fontWeight="bold">Total: ${total.toFixed(2)}</Text>
+              </VStack>
+            )}
+          </DrawerBody>
+          <DrawerFooter>
+            {orderSuccess ? (
+              <Button colorScheme="blue" onClick={handleCloseDrawer}>Ir al Home</Button>
+            ) : (
+              <Button colorScheme="green" onClick={handleCheckout}>Confirmar Compra</Button>
+            )}
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </Box>
   );
 };

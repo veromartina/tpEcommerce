@@ -14,7 +14,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const [show, setShow] = useState(false);
@@ -23,13 +22,10 @@ export const Login = () => {
   const { errors } = formState;
 
   const { login } = useAuth();
-  const navigate = useNavigate();
-
   const onSubmit = async (data) => {
     try {
       await login(data);
-      // Si el login es exitoso, redirigimos a la página de creación de pedidos
-      navigate("/cart");
+
     } catch (error) {
       console.error("Error en el login", error);
     }
@@ -95,3 +91,4 @@ export const Login = () => {
     </Box>
   );
 };
+  {/* FALTA MOSTRAR EL NOMBRE DEL CLIENTE MIENTRAS ESTE CON SU SESION INICIADA Y FUNCION PARA GUARDAR ESOS DATOS CUANDO SE LOGEA */}

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import {  Box, CloseButton, Alert, AlertIcon, AlertTitle, AlertDescription} from "@chakra-ui/react";
 
 
-
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -13,8 +12,6 @@ export const AuthProvider = ({ children }) => {
   const [alert, setAlert] = useState(null);
   const navigate = useNavigate(); 
  
-
-  // Verificar si hay un usuario autenticado al cargar la app
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
@@ -23,8 +20,10 @@ export const AuthProvider = ({ children }) => {
 
     return () => unsubscribe(); // Evitar fugas de memoria
   }, []);
+
+  
   const showAlert = (title, description, status) => {
-     ({ title, description, status });
+    setAlert({ title, description, status });
     setTimeout(() => setAlert(null), 4000);
   };
 
@@ -38,11 +37,10 @@ export const AuthProvider = ({ children }) => {
       navigate("/"); 
 
     } catch (error) {
-      console.log(error.code, error.message);
-      showAlert("Error al registrarse", error.message, "error");
+     
+      showAlert("Error al registrarse");
     }
   };  
-
 
   // Función de login con correo y contraseña
   const login = async ({ email, password }) => {

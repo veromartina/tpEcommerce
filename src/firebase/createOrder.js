@@ -12,7 +12,7 @@ export const createOrder = async (cart, uid) => {
         name: product.name,
         image_url: product.image_url,
         price: product.price,
-      //quantity: product.quantity,
+      
       })),
       total: cart.reduce((acc, item) => acc + item.price * item.quantity, 0), // 💡 Guarda el total
       createdAt: new Date(),
