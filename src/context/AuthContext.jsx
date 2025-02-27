@@ -1,77 +1,92 @@
-
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../firebase/config";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth"; // Importo métodos necesarios para Google
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth"; 
+import { useNavigate } from "react-router-dom"; 
+import {  Box, CloseButton, Alert, AlertIcon, AlertTitle, AlertDescription} from "@chakra-ui/react";
+
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [alert, setAlert] = useState(null);
+  const navigate = useNavigate(); 
+ 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        
+    });
 
-  // Función para login con Google
-  const loginWithGoogle = () => {
-    const provider = new GoogleAuthProvider(); // Configuración del proveedor de Google
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        setUser(user.uid);
-        console.log("Usuario autenticado con Google: ", user);
-      })
-      .catch((error) => {
-        console.log("Error con Google Auth: ", error.code, error.message);
-      });
+    return () => unsubscribe(); // Evitar fugas de memoria
+  }, []);
+
+  
+  const showAlert = (title, description, status) => {
+    setAlert({ title, description, status });
+    setTimeout(() => setAlert(null), 4000);
   };
-  
-    // Función de login con correo y contraseña
-  const login = ({email, password})=>{
-signInWithEmailAndPassword(auth, 
-  email,
-  password)
 
-  .then((userCredential)=>{
-    const user = userCredential.user;
-     setUser(user.uid); // Actualiza el estado del usuario
-     console.log(user)
-  })
-  .catch((error)=>{
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log("Error de inicio de sesión: ", errorCode, errorMessage)
-  });
-  };
-  
-   // Función de registro
-  const registerUser = async ({email, password})=> {
-    
-    try{
-        const userCredential = await createUserWithEmailAndPassword(auth, 
-        email,
-        password)
-        const user = userCredential.user;
-        console.log(userCredential)
 
-        setUser(user.uid); // Actualiza el estado del usuario
-        console.log(user); 
-  
-  return user;
+  // Función de registro
+  const registerUser = async ({ email, password }) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+      showAlert("Registro exitoso", "Tu cuenta ha sido creada con éxito.", "success");
+      navigate("/"); 
 
-        }catch(error) {
-            const errorCode = error.code;
-            const errorMessage =error.message;
-           
-    // Verifica si el error es de "email already in use"
-    if (errorCode === "auth/email-already-in-use") {
-      console.log("Este correo ya está en uso");
+    } catch (error) {
      
-    } else {
-      console.log("Error de registro: ", errorCode, errorMessage);
+      showAlert("Error al registrarse");
     }
-  } 
-        };
-    
-        return (
-    <AuthContext.Provider value={{ user,registerUser, login, loginWithGoogle }}>{children}</AuthContext.Provider>
+  };  
+
+  // Función de login con correo y contraseña
+  const login = async ({ email, password }) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+      showAlert("Inicio de sesión exitoso", "Has iniciado sesión correctamente.", "success");
+      navigate("/");
+
+    } catch (error) {
+      console.log(error.code, error.message);
+      showAlert("Error al iniciar sesión", error.message, "error");
+    }
+  };
+
+
+  //  Función para cerrar sesión con redirección
+ 
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      showAlert("Sesión cerrada", "Has cerrado sesión correctamente.", "info");
+      navigate("/");
+     
+    } catch (error) {
+      console.log("Error al cerrar sesión:", error);
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, registerUser, login, logout}}>
+       {alert && (
+        <Box position="fixed" top="20px" left="50%" transform="translateX(-50%)" zIndex={1000} width="80%" maxW="400px">
+          <Alert status={alert.status} variant="subtle" flexDirection="column" alignItems="center" textAlign="center" borderRadius="md" boxShadow="lg">
+            <AlertIcon boxSize="40px" />
+            <AlertTitle mt={4} mb={1} fontSize="lg">{alert.title}</AlertTitle>
+            <AlertDescription maxWidth="sm">{alert.description}</AlertDescription>
+            <CloseButton position="absolute" right="8px" top="8px" onClick={() => setAlert(null)} />
+          </Alert>
+        </Box>
+      )}
+
+      {children}
+    </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => useContext(AuthContext);
