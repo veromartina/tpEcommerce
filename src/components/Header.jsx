@@ -70,7 +70,7 @@ const Header = () => {
             </Button>
             <RouterLink to="/cart">
               <Button variant="ghost" fontSize="2xl">
-                🛒
+                <Image src="/cart.gif" width="35px" height="35px"/>
               </Button>
             </RouterLink>
           </HStack>

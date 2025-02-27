@@ -55,22 +55,10 @@ const ShoppingCart = () => {
                 <Image src={image_url} alt={name} boxSize="120px" objectFit="cover" />
                 <Text fontWeight="bold">{name}</Text>
                 <Text fontSize="lg">${price} c/u</Text>
-                <Text color="gray.600">Stock disponible: {stock}</Text>
-                <Box display="flex"     align-items="center" justifyContent="space-around">
+                <Text fontSize="lg">cantidad: {quantity}</Text>
+                <Box display="flex"  align-items="center" justifyContent="space-around">
 
-                {/* Input para cambiar cantidad  FALTA LOGRAR QUE SE MANTEGA LA CANTIDAD VISIBLE DE CADA PRODUCTO  AL LADO DEL INPUT PARA CONTROL DEL CLIENTE, Y UN TOTAL PROVISORIO POR PRODUCTO. QUE EN DRAWER ME MUESTRE EL TOTAL DE CADA PRODUCTO Y EL TOTAL DEFINITIVO*/}
-
-                <Input 
-                  type="number" 
-                  min="1" 
-                  max={stock}
-                  placeholder="Cantidad"     
-                  onChange={(e) => updateQuantity(id, Math.min(stock, Math.max(1, parseInt(e.target.value, 10) || 1)))}
-                  size="sm"
-                  width="80px"
-                  mt={3}
-                />
-
+              
                 <Button colorScheme="red" size="sm" mt={2} onClick={() => removeFromCart(id)}>
                   ❌ Eliminar
                 </Button>
@@ -89,7 +77,7 @@ const ShoppingCart = () => {
               🗑 Vaciar Carrito
             </Button>
             <Button colorScheme="green" mt={4} ml={2} onClick={() => setIsDrawerOpen(true)}>
-              🛍 Finalizar Compra
+              🛍 Revisar pedido
             </Button>
           </Box>
 
