@@ -1,10 +1,13 @@
 Proyecto Final React: E-commerce "Mujer Bonita" ✨
+------------------------------------------------------------
 Dicha aplicación muestra vestidos de fiestas desde un base de datos,permitiendo al cliente comprar los mismos mediante un carrito de compras interactivo(pudiendo agregar y quitar productos) Se utilizo Firebase como backend y Chakra UI para los componentes de la interfaz.
 
 Comenzando 🚀
+-----------------------------------------------------------------------
 Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas.
 
 Pre-requisitos 📋
+---------------------------------------------------------------------------
 Node.js
 pnpm
 Firebase
@@ -16,12 +19,15 @@ react-router-dom: Para manejar rutas y navegación.
 axios: Librería para hacer solicitudes HTTP.
 react-icons: Conjunto de iconos populares.
 simple-import-sort: Herramienta para organizar automáticamente las importaciones.
+
 Instalación 🔧
+-----------------------------------------------------------------------
 Clona el repositorio a tu máquina local:
+
 git clone https://github.com/veromartina/tpEcommerce
 Navega al directorio del proyecto: cd ecommerce
-
 Instala las dependencias: pnpm install.
+
 Puedes tener en cuenta : 
 Comando pnpm	Descripción
 pnpm install	Instala todas las dependencias del package.json.
@@ -36,17 +42,23 @@ Crea un archivo .env y agrega tus credenciales de Firebase, usando las variables
 Ejecuta el proyecto: pnpm run dev
 
 Construido con 🛠️
+-----------------------------------------------------------------------------
 React - La biblioteca de JavaScript para la interfaz de usuario.
 Chakra UI - Framework de componentes UI.
 Firebase - Backend para la base de datos.
 React Router - Enrutamiento de la aplicación.
+
 Autores ✒️
+----------------------------------------------------------------------------
 Martina Verónica Soledad
+
 Expresiones de Gratitud 🎁
+----------------------------------------------------------------------------
 ¡Gracias a todos los profes de Ada por brindarme sus conocimientos y su apoyo incondicional hasta el final del curso!. 
 Espero continuar creciendo , brindar mis códigos y aprender del resto.
 
 Vista previa del proyecto
+----------------------------------------------------------------------------
 
 [![home.png](https://i.postimg.cc/GmZW4x05/home.png)](https://postimg.cc/Js56gJzN)
 [![registrarse.png](https://i.postimg.cc/15YhQZvP/registrarse.png)](https://postimg.cc/dLdS2gMS)
