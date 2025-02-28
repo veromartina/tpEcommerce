@@ -1,6 +1,7 @@
+
 import { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../firebase/config";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth"; 
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth"; 
 import { useNavigate } from "react-router-dom"; 
 import {  Box, CloseButton, Alert, AlertIcon, AlertTitle, AlertDescription} from "@chakra-ui/react";
 
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }) => {
       navigate("/"); 
 
     } catch (error) {
-     
+     console.log(error)
       showAlert("Error al registrarse");
     }
   };  
@@ -55,6 +56,23 @@ export const AuthProvider = ({ children }) => {
       showAlert("Error al iniciar sesión", error.message, "error");
     }
   };
+
+    // Función de login con google
+  const signinWhitGoogle = async ()=> {
+    const provider = new GoogleAuthProvider();
+    try{
+      const result = signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+      console.log(user, "autenticado");
+      return user;
+
+    } catch (error) {
+  console.log(error.menssage);
+ }
+ };
+
 
 
   //  Función para cerrar sesión con redirección
@@ -87,6 +105,6 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 export const useAuth = () => useContext(AuthContext);

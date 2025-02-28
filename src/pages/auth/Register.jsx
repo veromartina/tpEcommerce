@@ -1,11 +1,13 @@
 
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Heading, IconButton,Input, InputGroup, InputRightElement } from "@chakra-ui/react"; 
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Box, FormControl, FormLabel, FormErrorMessage, Input, InputGroup, InputRightElement, Button, Heading, IconButton } from "@chakra-ui/react"; 
-import { useAuth } from "../../context/AuthContext";
 import { FiEye, FiEyeOff } from "react-icons/fi"; 
-import { Login } from "./Login";
-import { Navigate, useNavigate } from "react-router-dom"; 
+//import { Login } from "./Login";
+import { Navigate } from "react-router-dom"; 
+
+import { useAuth } from "../../context/AuthContext";
 
 
 export const Register = () => {
@@ -16,7 +18,7 @@ export const Register = () => {
   const { register, formState, handleSubmit } = useForm();
   const { errors } = formState;
 
-  const { registerUser, loginWithGoogle  } = useAuth(); // Desestructuramos loginWithGoogle desde useAuth
+  const { registerUser } = useAuth();
 
   const [isRegistered, setIsRegistered] = useState(false); // Estado para controlar la redirección
 
@@ -34,7 +36,6 @@ export const Register = () => {
 if (isRegistered) {
   return <Navigate to="/login" />;
 }
-
 
   return (
     <Box maxW="400px" mx="auto" mt="10">
@@ -76,7 +77,7 @@ if (isRegistered) {
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
         </FormControl> 
 
-        <Button mt={4} colorScheme="teal" type="submit" width="100%" >
+        <Button mt={4} borderRadius="25px"  colorScheme="teal" type="submit" width="100%" >
           Registrarme
         </Button>
       </form>
