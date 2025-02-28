@@ -1,19 +1,21 @@
+/* eslint-disable no-unused-vars */
 import {
   Box,
+  Button,
   FormControl,
-  FormLabel,
   FormErrorMessage,
+  FormLabel,
+  Heading,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Button,
-  Heading,
-  IconButton,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../context/AuthContext";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+
+import { useAuth } from "../../context/AuthContext";
 
 export const Login = () => {
   const [show, setShow] = useState(false);
@@ -21,11 +23,10 @@ export const Login = () => {
   const { register, formState, handleSubmit } = useForm();
   const { errors } = formState;
 
-  const { login } = useAuth();
+  const { login, handleGoogleSignIn } = useAuth();
   const onSubmit = async (data) => {
     try {
       await login(data);
-
     } catch (error) {
       console.error("Error en el login", error);
     }
@@ -75,20 +76,30 @@ export const Login = () => {
           </InputGroup>
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
         </FormControl>
-        <Box display="flex" justifyContent="center">
-          {" "}
-          <Button
-            mt={4}
-            colorScheme="teal"
-            type="submit"
-            width="50%"
-            justifyItems="center"
-          >
-            Iniciar sesion
-          </Button>
-        </Box>
+
+        <Button
+          mt={4}
+          borderRadius="25px"
+          colorScheme="teal"
+          type="submit"
+          width="100%"
+        >
+          Iniciar sesion
+        </Button>
+        <Button
+          onClick={handleGoogleSignIn}
+          mt={4}
+          borderRadius="25px"
+          bg="green.600"
+          type="submit"
+          width="100%"
+        >
+          Iniciar sesion con google
+        </Button>
       </form>
     </Box>
   );
 };
-  {/* FALTA MOSTRAR EL NOMBRE DEL CLIENTE MIENTRAS ESTE CON SU SESION INICIADA Y FUNCION PARA GUARDAR ESOS DATOS CUANDO SE LOGEA */}
+{
+  /* FALTA MOSTRAR EL NOMBRE DEL CLIENTE MIENTRAS ESTE CON SU SESION INICIADA Y FUNCION PARA GUARDAR ESOS DATOS CUANDO SE LOGEA */
+}

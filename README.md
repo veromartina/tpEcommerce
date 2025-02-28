@@ -60,11 +60,11 @@ Espero continuar creciendo , brindar mis códigos y aprender del resto.
 Vista previa del proyecto
 ----------------------------------------------------------------------------
 
-[![home.png](https://i.postimg.cc/GmZW4x05/home.png)](https://postimg.cc/Js56gJzN)
+[![home.png](https://i.postimg.cc/tgkQSj8g/home.png)](https://postimg.cc/bGZBrKyX)
 [![registrarse.png](https://i.postimg.cc/15YhQZvP/registrarse.png)](https://postimg.cc/dLdS2gMS)
 [![inicio-Sesion.png](https://i.postimg.cc/RFQx56Db/inicio-Sesion.png)](https://postimg.cc/XGJz9J3w)
 [![cerrar-Sesion.png](https://i.postimg.cc/7P9rKz75/cerrar-Sesion.png)](https://postimg.cc/Z0WQRCwm)
-[![productos.png](https://i.postimg.cc/XYmbw05x/productos.png)](https://postimg.cc/K1Pw2wJg)
+[![productos1.png](https://i.postimg.cc/j5GbNhG6/productos1.png)](https://postimg.cc/zbS6YTD3)
 [![detalle-Producto.png](https://i.postimg.cc/nrpZCYmJ/detalle-Producto.png)](https://postimg.cc/ZB7XQNj7)
 [![carrito.png](https://i.postimg.cc/gkMd2hkC/carrito.png)](https://postimg.cc/hf7NCfms)
 [![confirmar-Compra.png](https://i.postimg.cc/J75MSvw4/confirmar-Compra.png)](https://postimg.cc/BtbrKhQd)
