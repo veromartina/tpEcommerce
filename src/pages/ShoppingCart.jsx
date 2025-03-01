@@ -13,14 +13,13 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-  Input,
 } from "@chakra-ui/react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { createOrder } from "../firebase/createOrder";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
-const ShoppingCart = () => {
+const ShoppingCart = ({ refreshProducts }) => {
   const { cart, updateQuantity, removeFromCart, clearCart, totalItems } =
     useCart();
   const { user } = useAuth();
@@ -42,6 +41,7 @@ const ShoppingCart = () => {
       await createOrder(cart, user.uid);
       clearCart();
       setOrderSuccess(true);
+      refreshProducts(); 
     } catch (error) {
       console.error("Error al procesar el pedido:", error);
     }
@@ -138,8 +138,7 @@ const ShoppingCart = () => {
       <Drawer
         isOpen={isDrawerOpen}
         placement="right"
-        onClose={handleCloseDrawer}
-      >
+        onClose={() => setIsDrawerOpen(false)}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader>🛍 Resumen de su Pedido</DrawerHeader>
@@ -164,9 +163,7 @@ const ShoppingCart = () => {
           </DrawerBody>
           <DrawerFooter>
             {orderSuccess ? (
-              <Button colorScheme="blue" onClick={handleCloseDrawer}>
-                Ir al Home
-              </Button>
+              <Button colorScheme="blue" onClick={() => navigate("/")}>Ir al Home</Button>
             ) : (
               <Button colorScheme="green" onClick={handleCheckout}>
                 Confirmar Compra
@@ -180,7 +177,5 @@ const ShoppingCart = () => {
 };
 
 export default ShoppingCart;
-
 /// FALTA!!!!!
-// **  controlar el stock
 // ** Página privada que solo muestra información del usuario logueado, incluyendo su correo y un historial de compras.
