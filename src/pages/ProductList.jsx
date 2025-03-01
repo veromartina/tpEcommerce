@@ -112,7 +112,14 @@ const ProductList = () => {
       </Box>
 
       {/* Barra de Filtros */}
-      <Box display="flex" gap={4} mb={4} justifyContent="center">
+      <Box
+        display="flex"
+        gap={{ base: 2, md: 4 }} 
+        mb={4}
+        justifyContent="center"
+        flexDirection={{ base: "column", sm: "row" }} 
+        alignItems="center"
+      >
         <Input
           placeholder="Buscar por nombre..."
           value={searchQuery}
@@ -187,7 +194,7 @@ const ProductList = () => {
                   colorScheme="teal"
                   mt={2}
                   w="150px"
-                  isDisabled={!user || stock === 0} 
+                  isDisabled={!user || stock === 0}
                   onClick={() =>
                     addToCart({ id, name, price, image_url, stock })
                   }
@@ -203,10 +210,8 @@ const ProductList = () => {
           </Text>
         )}
       </SimpleGrid>
-     
     </Box>
   );
 };
 
 export default ProductList;
-
