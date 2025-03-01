@@ -1,7 +1,7 @@
 import { Card as CardChakra, CardBody, Divider, Heading, Image, Stack, Text, Button } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { db } from "../firebase/config";  // Asegúrate de importar tu configuración de Firebase
+import { db } from "../firebase/config"; 
 import { doc, getDoc } from "firebase/firestore";
 
 const ProductDetails = () => {
@@ -30,7 +30,7 @@ const ProductDetails = () => {
       }
     };
 
-    fetchProduct(); // Llamamos a la función para obtener el producto al cargar el componente
+    fetchProduct();
   }, [id]);
 
   if (loading) {

@@ -21,7 +21,7 @@ export const createOrder = async (cart, uid) => {
       createdAt: new Date(),
     });
 
-    // 🔥 Actualizar stock en Firebase 🔥
+    //  Actualizar stock en Firebase 
     for (const item of cart) {
       const productRef = doc(db, "productos", item.id);
       const productSnap = await getDoc(productRef);
