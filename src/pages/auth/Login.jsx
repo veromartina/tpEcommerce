@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Box,
   Button,
@@ -23,7 +22,7 @@ export const Login = () => {
   const { register, formState, handleSubmit } = useForm();
   const { errors } = formState;
 
-  const { login, handleGoogleSignIn } = useAuth();
+  const { login, signInWithGoogle } = useAuth();
   const onSubmit = async (data) => {
     try {
       await login(data);
@@ -87,13 +86,13 @@ export const Login = () => {
           Iniciar sesion
         </Button>
         <Button
-          onClick={handleGoogleSignIn}
-          mt={4}
-          borderRadius="25px"
-          bg="green.600"
-          type="submit"
-          width="100%"
-        >
+  onClick={signInWithGoogle} 
+  mt={4}
+  borderRadius="25px"
+  bg="green.600"
+  type="button"  
+  width="100%"
+>
           Iniciar sesion con google
         </Button>
       </form>

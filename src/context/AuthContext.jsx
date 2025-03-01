@@ -58,23 +58,26 @@ export const AuthProvider = ({ children }) => {
   };
 
     // Función de login con google
-  const signinWhitGoogle = async ()=> {
-    const provider = new GoogleAuthProvider();
-    try{
-      const result = signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      const user = result.user;
-      console.log(user, "autenticado");
-      return user;
-
-    } catch (error) {
-  console.log(error.menssage);
- }
- };
-
-
-
+    const signInWithGoogle = async () => {
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: "select_account" });
+    
+      try {
+        await signOut(auth);
+        localStorage.clear(); // Borra almacenamiento local
+        sessionStorage.clear(); // Borra la sesión actual
+        document.cookie.split(";").forEach((c) => { // Borra cookies
+          document.cookie = c
+            .replace(/^ +/, "")
+            .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+    
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.log("Error en inicio con Google:", error.message);
+        showAlert("Error al iniciar sesión", error.message, "error");
+      }
+    };
   //  Función para cerrar sesión con redirección
  
   const logout = async () => {
@@ -90,7 +93,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, registerUser, login, logout}}>
+    <AuthContext.Provider value={{ user, registerUser, login, logout, signInWithGoogle }}>
        {alert && (
         <Box position="fixed" top="20px" left="50%" transform="translateX(-50%)" zIndex={1000} width="80%" maxW="400px">
           <Alert status={alert.status} variant="subtle" flexDirection="column" alignItems="center" textAlign="center" borderRadius="md" boxShadow="lg">
