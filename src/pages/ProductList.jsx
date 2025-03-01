@@ -32,8 +32,6 @@ const ProductList = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState("all");
   const [showFavorites, setShowFavorites] = useState(false);
 
-
-  //fetchProducts fuera del "useEffect" para poder reutilizarla
   const fetchProducts = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "productos"));
@@ -127,9 +125,9 @@ const ProductList = () => {
           onChange={(e) => setSelectedPriceRange(e.target.value)}
         >
           <option value="all">Todos los precios</option>
-          <option value="low">Menos de $5000</option>
-          <option value="medium">$5000 - $10000</option>
-          <option value="high">Más de $10000</option>
+          <option value="low">Menos de $500000</option>
+          <option value="medium">$500000 - $1000000</option>
+          <option value="high">Más de $1000000</option>
         </Select>
         <Checkbox
           isChecked={showFavorites}
@@ -189,7 +187,7 @@ const ProductList = () => {
                   colorScheme="teal"
                   mt={2}
                   w="150px"
-                  isDisabled={!user}
+                  isDisabled={!user || stock === 0} 
                   onClick={() =>
                     addToCart({ id, name, price, image_url, stock })
                   }
@@ -205,7 +203,7 @@ const ProductList = () => {
           </Text>
         )}
       </SimpleGrid>
-      <ShoppingCart refreshProducts={fetchProducts} />
+     
     </Box>
   );
 };
