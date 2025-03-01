@@ -177,5 +177,5 @@ const ShoppingCart = ({ refreshProducts }) => {
 };
 
 export default ShoppingCart;
-/// FALTA!!!!!
-// ** Página privada que solo muestra información del usuario logueado, incluyendo su correo y un historial de compras.
+
+
